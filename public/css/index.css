@@ -1,0 +1,21 @@
+body{
+    display: flex;
+}
+.table{
+    display: flex;
+    flex-direction: column;
+}
+.line{
+    display: flex;
+}
+.line:first-child{
+    font-size: 20px;
+    font-weight: bold;
+}
+.line>div{
+    border: 1px solid #000;
+    border-right: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
