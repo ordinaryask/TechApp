@@ -1,10 +1,9 @@
 const express 		= require('express');
 const bodyParser 	= require('body-parser');
 const app 			= express();
-var server  		= require('http').createServer(app);
-var events			= require('events');
-var myEmit			= new events.EventEmitter();
-var io				= require('socket.io').listen(server);
+const server  		= require('http').createServer(app);
+const events			= require('events');
+const io				= require('socket.io').listen(server);
 const fs = require("fs");
 const readline = require("readline");
 
@@ -20,16 +19,25 @@ app.get('/', (req, res) => {
 	res.sendFile('index.html',{root : __dirname});
 });
 
-var file = "base.csv";
+const file = "police.csv";
 
-var rl = readline.createInterface({
+const rl = readline.createInterface({
        input: fs.createReadStream(file),
        output: null,
        terminal: false
-})
-var mas = [];
+});
+
+let mas = [];
+
 rl.on("line", function(line) {
        mas.push(line);
+       mas.length % 100 == 0 ? rl.pause() : '';
+});
+rl.on("pause", function(){
+	console.log('Reading is stoped');
+});
+rl.on('resume', () =>{
+	console.log('Reading is resumed');
 });
 
 rl.on("close", function() {
@@ -40,6 +48,10 @@ io.sockets.on('connection',(socket) => {
 	console.log('Good connection');
 
 	app.post('/',(req, res) => {
+		res.send(JSON.stringify(mas));
+	});
+	app.post('/getTable',(req, res) => {
+		rl.resume();
 		res.send(JSON.stringify(mas));
 	});
 

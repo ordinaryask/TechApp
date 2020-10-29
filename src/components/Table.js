@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 
 const widthUnit = 200;
@@ -19,7 +19,6 @@ class Line extends React.Component{
 			unit:(this.props.unit).split(','),
 		};
 	}
-
 	getLine(){
 		let unit = this.state.unit;
 		let line = [];
@@ -30,7 +29,6 @@ class Line extends React.Component{
 
 		return line;
 	}
-
 	render(){
 		const style = { width:(this.state.unit).length * widthUnit};
 		return(
@@ -39,36 +37,44 @@ class Line extends React.Component{
 	}
 }
 
-class Table extends React.Component{
-	constructor(props) {
-	    super(props);
-	    this.state = {
-			data : [],
-	    };
+function Table(props){
+	const [data,setData] = useState([]);
+	axios.post('/',{})
+		.then(res => {
+				setData(res.data);
+		});
+	document.onscroll = () => {
+		if(document.scrollingElement.scrollTopMax - document.scrollingElement.scrollTop == 0){
+			axios.post('/getTable',{})
+				.then(res => {
+					setData(res.data);
+				});
+		}
 	}
-	componentWillMount(){
-		axios.post('/',{})
-			.then(res => {
-				console.log(res.data);
-				this.setState({data:res.data});
-			});
-	}
-	getTable(){
-		let table = [];
-		let data = this.state.data;
 
-		for(var i in data){
+	let getTable = () =>{
+		let table = [];
+
+		for(let i in data){
 			table.push(<Line unit = {data[i]} />);
 		}
 
 		return table;
 	}
-
-	render(){
-		return(
-			<div className='table'>{this.getTable()}</div>
-		)
+	const style = {
+		position:'absolute',
+		top:'50%',
+		width:'200px',
+		height:'200px',
+		background:'purple'
 	}
+	return(
+		<div className='table'>
+			{getTable()}
+			<div style = {style}>Hello WORLD!</div>
+		</div>
+
+	)
 }
 
 export default Table;
