@@ -72,6 +72,11 @@ function Table(props){
 		<div className='table'>
 			{getTable()}
 			<div style = {style}>Hello WORLD!</div>
+			<div>asd</div>
+			<div>asd</div>
+			<div>fasdf</div>
+			<div>sadg</div>
+			<div>gasfgas</div>
 		</div>
 
 	)
