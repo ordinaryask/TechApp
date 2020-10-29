@@ -71,7 +71,6 @@ function Table(props){
 	return(
 		<div className='table'>
 			{getTable()}
-			<div style = {style}>Hello WORLD!</div>
 		</div>
 
 	)
